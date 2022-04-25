@@ -1,74 +1,18 @@
 //import 'dart:io';
 //import 'dart:js';
+
 import 'dart:ui';
+import 'package:google_fonts/google_fonts.dart';
+//import 'package:window_size/window_size.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-enum Language { English, Spanish, Tagalog, French, SIZE }
-
-class AppText {
-  // set this once and the getter handles it from there.
-  var _language = Language.English;
-
-  List<String> _hello =
-      List.filled(Language.SIZE.index, "unset", growable: false);
-  List<String> _title =
-      List.filled(Language.SIZE.index, "unset", growable: false);
-  List<String> _copyright =
-      List.filled(Language.SIZE.index, "unset", growable: false);
-  List<String> _body =
-      List.filled(Language.SIZE.index, "unset", growable: false);
-
-  AppText() {
-    _hello[Language.English.index] = "Hello";
-    _hello[Language.Spanish.index] = "Hola";
-    _hello[Language.French.index] = "Bonjour";
-    _hello[Language.Tagalog.index] = "Hello";
-
-    _title[Language.English.index] = "I am Rich";
-    _title[Language.Spanish.index] = "Soy Rico";
-    _title[Language.French.index] = "Je Suis Riche";
-    _title[Language.Tagalog.index] = "Ako ay Mayaman";
-
-    _copyright[Language.English.index] = "Copyright Jerry Hobby";
-    _copyright[Language.Spanish.index] = "Derechos de autor Jerry Hobby";
-    _copyright[Language.French.index] = "Droit d'auteur Jerry Hobby";
-    _copyright[Language.Tagalog.index] = "Copyright Jerry Hobby";
-
-    _body[Language.English.index] = "ENGLISH TEST --- ";
-    _body[Language.Spanish.index] = "Esta aplicación no hace nada en absoluto.";
-    _body[Language.French.index] = "Cette application ne fait rien du tout.";
-    _body[Language.Tagalog.index] = "Walang ginagawa ang app na ito.";
-  }
-
-  String get hello {
-    return (_hello[_language.index]);
-  }
-
-  String get title {
-    return (_title[_language.index]);
-  }
-
-  String get copyright {
-    return (_copyright[_language.index]);
-  }
-
-  String get body {
-    return (_body[_language.index]);
-  }
-
-  Language get language {
-    return (_language);
-  }
-
-  set language(Language newLanguage) {
-    this._language = newLanguage;
-  }
-}
-
 ///////////////////////////////////////////////////
-// MAIN
+// app modules
+import 'language.dart';
+
+var appText = AppText();
 
 var appTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
@@ -77,12 +21,33 @@ var appTheme = ThemeData(
   backgroundColor: Colors.white,
 );
 
-var appText = AppText();
+///////////////////////////////////////////////////
+// assets
+
+const aiLogoFile = AssetImage('lib/assets/ailogo.png');
+const goldLogoFile = AssetImage('lib/assets/gold.png');
+const flagUnitedStates = AssetImage('lib/assets/united-states.png');
+const flagFrance = AssetImage('lib/assets/france.png');
+const flagMexico = AssetImage('lib/assets/mexico.png');
+const flagPhillipines = AssetImage('lib/assets/philippines.png');
+
+///////////////////////////////////////////////////
+// MAIN
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+/*
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowTitle('My App');
+    setWindowMaxSize(const Size(max_width, max_height));
+    setWindowMinSize(const Size(min_width, min_height));
+  }
+*/
+
+
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -91,18 +56,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: appText.title,
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
       home: MyHomePage(title: appText.title),
     );
   }
@@ -127,6 +80,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 3: Home 2',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+
+      if (index == 0) appText.language = Language.English;
+      if (index == 1) appText.language = Language.French;
+      if (index == 2) appText.language = Language.Spanish;
+      if (index == 3) appText.language = Language.Tagalog;
+    });
+  }
+
   void _onClick(String Pressed) {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -144,8 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final aiLogoFile = AssetImage('lib/assets/ailogo.png');
-
     return MaterialApp(
       darkTheme: appTheme,
       theme: appTheme,
@@ -155,36 +139,37 @@ class _MyHomePageState extends State<MyHomePage> {
             centerTitle: true,
             title: Text(
               appText.title,
-              style: TextStyle(
-                fontSize: 32.0,
-                fontFamily: 'Lucida Console',
-                //fontStyle: FontStyle.italic,
-                //decoration: TextDecoration.underline,
-              ),
+              style: GoogleFonts.handlee(fontSize: 42.0,),
             )),
         body: Column(
           children: [
-            Text(
-              appText.body,
-              style: TextStyle(
-                fontSize: 22.0,
-                fontFamily: 'Lucida Console',
-                //fontStyle: FontStyle.italic,
-                //decoration: TextDecoration.underline,
-              ),
-            ),
             Center(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(30.0),
                 child: Image(
-                  image: aiLogoFile,
-                  width: 100,
+                  image: goldLogoFile,
+                  width: 250,
                 ),
 //                Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
               ),
             ),
+            Padding(
+              // Even Padding On All Sides
+              // padding: EdgeInsets.all(10.0),
+              // Symetric Padding
+              // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+              // Different Padding For All Sides
+              padding: EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 4.0),
+
+              child: Text(
+                appText.body,
+                softWrap: true,
+                style: GoogleFonts.handlee(fontSize: 25.0,),
+              ),
+            )
           ],
         ),
+/*
         persistentFooterButtons:
         <Widget>[
           new IconButton(
@@ -198,6 +183,31 @@ class _MyHomePageState extends State<MyHomePage> {
           new IconButton(
               icon: new Icon(Icons.language), onPressed: () => _onClick('Tagalog')),
         ],
+*/
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.language),
+              label: 'English',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.language),
+              label: 'French',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.language),
+              label: 'Spanish',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.language),
+              label: 'Tagalog',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          // selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
