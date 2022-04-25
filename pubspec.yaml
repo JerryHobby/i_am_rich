@@ -63,7 +63,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - lib/ailogo.png
+    - lib/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -94,5 +94,5 @@ flutter:
 fonts:
   - family: Lucida Console
     fonts:
-      - asset: fonts/lucon.ttf
+      - asset: lib/assets/lucon.ttf
 
