@@ -3,7 +3,7 @@
 
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
-//import 'package:window_size/window_size.dart';
+import 'package:desktop_window/desktop_window.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -37,9 +37,14 @@ const flagPhillipines = AssetImage('lib/assets/philippines.png');
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-/*
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  // future feature
+  // DesktopWindow.setMaxWindowSize(Size (200, 700));
+  // DesktopWindow.resetMaxWindowSize();
+
+  /*
+  if (DesktopWindow.Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle('My App');
+
     setWindowMaxSize(const Size(max_width, max_height));
     setWindowMinSize(const Size(min_width, min_height));
   }
